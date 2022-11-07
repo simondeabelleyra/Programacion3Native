@@ -2,6 +2,7 @@ import { Camera, CameraType } from "expo-camera";
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { FontAwesome, Ionicons, AntDesign } from '@expo/vector-icons';
+import { storage } from '../firebase/config';
 
 class CameraPost extends Component{
     constructor(props){
@@ -38,6 +39,32 @@ class CameraPost extends Component{
         
     }
 
+    clearPhoto() {
+        this.setState({
+            photo: '',
+            showCamera: true,
+        })
+    }
+
+    savePhoto(){
+        fetch(this.state.photo)
+         .then(res=>res.blob())
+         .then(image =>{
+           const ref=storage.ref(`photos/${Date.now()}.jpg`)
+           ref.put(image)
+                .then(()=>{
+                   ref.getDownloadURL()
+                        .then(url => {
+                            this.props.onImageUpload(url);
+                         })
+                 })
+         })
+         .catch(e=>console.log(e))
+       }
+
+       
+
+
     render(){
         return(
             <View style={style.container}>
@@ -54,14 +81,21 @@ class CameraPost extends Component{
                     </React.Fragment>
                 : null}
                 {this.state.photo !== '' ?
-                    <Image 
-                        style={style.image}
-                        source={{uri: this.state.photo}}
-                    /> 
+                    <React.Fragment>
+                        <Image
+                            style={style.image}
+                            source={{ uri: this.state.photo }}
+                        />
+                        <TouchableOpacity onPress={() => this.savePhoto()} style={style.btnCapture}>
+                            <Text>Aceptar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.clearPhoto()} style={style.btnCapture}>
+                            <Text>Rechazar</Text>
+                        </TouchableOpacity>
+                    </React.Fragment>
                     :
                     null
                 }
-                
             </View>
         )
     }
@@ -69,7 +103,7 @@ class CameraPost extends Component{
 
 const style = StyleSheet.create({
     container: {
-        position: 'absolute'
+        
     },
     camera: {
         position: 'absolute',
@@ -79,8 +113,6 @@ const style = StyleSheet.create({
         height: '100vh'
     },
     btnCapture: {
-        position: 'relative',
-        bottom: 0,
         textAlign: 'center'
     },
     image: {

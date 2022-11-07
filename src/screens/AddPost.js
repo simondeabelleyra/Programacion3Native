@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {TouchableOpacity,View, Text, StyleSheet, TextInput } from 'react-native';
+import {TouchableOpacity,View, Text, StyleSheet, TextInput, Image } from 'react-native';
 import {db, auth} from '../firebase/config';
 import CameraPost from '../components/CameraPost';
 
@@ -10,10 +10,18 @@ class AddPost extends Component {
         this.state = {
             description: '',
             msj: '',
-            cameraOpen: false
+            cameraOpen: false,
+            photo: '',
         }
     }
 
+
+    onImageUpload(url) {
+        this.setState({
+            photo: url,
+            cameraOpen: false
+        })
+    }
 
     mostrarCamara() {
         this.setState({
@@ -25,7 +33,10 @@ class AddPost extends Component {
         db.collection('posts').add({
             owner: auth.currentUser.email,
             description: this.state.description,
-            createdAt: Date.now()
+            createdAt: Date.now(),
+            likes: [],
+            comments: [],
+            photo: this.state.photo
         })
         .then(res => {
             console.log(res);
@@ -56,12 +67,17 @@ class AddPost extends Component {
                         <TouchableOpacity onPress={() => this.mostrarCamara()} style={style.mostrarCamara}>
                             <Text style={style.mostrarCamaraTxt}>Agregar foto</Text>
                         </TouchableOpacity>
+                        {this.state.photo !== '' ? 
+                        <Image 
+                            style={style.image}
+                            source={{uri: this.state.photo}}
+                        />: null}
                         <TouchableOpacity onPress={() => this.crearPost()} style={style.btnPost}>
                             <Text style={style.textBtn}>Post</Text>
                         </TouchableOpacity>
                     </React.Fragment>
                 : 
-                    <CameraPost style={style.cameraComponent}/>
+                    <CameraPost style={style.cameraComponent} onImageUpload={(url) => this.onImageUpload(url)}/>
                 }
             </View>
         )
@@ -110,6 +126,10 @@ const style = StyleSheet.create({
     },
     mostrarCamaraTxt: {
         color: 'rgb(240,240,240)'
+    },
+    image: {
+        width: 400,
+        height: 400
     }
 })
 
