@@ -1,7 +1,7 @@
 import { Camera, CameraType } from "expo-camera";
 import React, { Component } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { FontAwesome, Ionicons, AntDesign } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 import { storage } from '../firebase/config';
 
 class CameraPost extends Component{
@@ -76,7 +76,7 @@ class CameraPost extends Component{
                             ref={metodosDeCamara => this.metodosDeCamara = metodosDeCamara}
                         />
                         <TouchableOpacity onPress={() => this.takePicture()} style={style.btnCapture}>
-                            <Ionicons name="ios-radio-button-off" size={24} color="black" />
+                            <MaterialIcons name="radio-button-off" size={28} color="black" />
                         </TouchableOpacity>
                     </React.Fragment>
                 : null}
@@ -87,10 +87,10 @@ class CameraPost extends Component{
                             source={{ uri: this.state.photo }}
                         />
                         <TouchableOpacity onPress={() => this.savePhoto()} style={style.btnCapture}>
-                            <Text>Aceptar</Text>
+                            <AntDesign name="checkcircle" size={24} color="green" />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.clearPhoto()} style={style.btnCapture}>
-                            <Text>Rechazar</Text>
+                            <Entypo name="circle-with-cross" size={24} color="red" />
                         </TouchableOpacity>
                     </React.Fragment>
                     :
@@ -103,7 +103,11 @@ class CameraPost extends Component{
 
 const style = StyleSheet.create({
     container: {
-        
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100vw',
+        height: '100vh'
     },
     camera: {
         position: 'absolute',

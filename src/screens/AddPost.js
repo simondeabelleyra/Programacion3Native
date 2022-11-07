@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
 import {TouchableOpacity,View, Text, StyleSheet, TextInput, Image } from 'react-native';
 import {db, auth} from '../firebase/config';
+import { FontAwesome, Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
 import CameraPost from '../components/CameraPost';
 
 
@@ -65,7 +66,7 @@ class AddPost extends Component {
                         value={this.state.description}
                         />
                         <TouchableOpacity onPress={() => this.mostrarCamara()} style={style.mostrarCamara}>
-                            <Text style={style.mostrarCamaraTxt}>Agregar foto</Text>
+                            <Text style={style.mostrarCamaraTxt}><AntDesign name="camerao" size={24} color="white" /> Agregar foto</Text>
                         </TouchableOpacity>
                         {this.state.photo !== '' ? 
                         <Image 
@@ -92,7 +93,7 @@ const style = StyleSheet.create({
         backgroundColor: 'rgb(0,0,0)',
         color: 'rgb(255,255,255)',
         padding: 15,
-        justifyContent: 'center',
+        justifyContent: 'center'
     },
     description: {
         backgroundColor: 'rgb(255,255,255)',
@@ -107,22 +108,21 @@ const style = StyleSheet.create({
     btnPost: {
         border: 'solid',
         borderWidth: 1,
-        borderColor: 'rgb(0,0,120)',
-        borderRadius: 10,
+        borderColor: 'rgb(150,150,150)',
+        borderStyle: 'solid',
+        borderRadius: 8,
         padding: 7.5,
         width: '30%',
     },
     textBtn: {
         fontSize: 16,
-        textAlign: 'center'
-    },
-    cameraComponent: {
-        position: 'absolute'
+        textAlign: 'center',
+        color: 'rgb(230, 230, 230)'
     },
     mostrarCamara: {
         backgroundColor: 'rgb(20,150,20)',
         padding: 10,
-        marginBottom: 15
+        marginBottom: 15,
     },
     mostrarCamaraTxt: {
         color: 'rgb(240,240,240)'

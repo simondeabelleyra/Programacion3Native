@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import Card from '../components/Card';
+import { db } from '../firebase/config';
 
 
 class Home extends Component {
@@ -10,7 +12,7 @@ class Home extends Component {
         }
     }
 
-    /* componentDidMount(){
+    componentDidMount(){
         db.collection('posts').onSnapshot(docs => {
             let posts = [];
             docs.forEach(doc => {
@@ -23,12 +25,21 @@ class Home extends Component {
                 posteos: posts
             })
         })
-    }; */
+    };
 
     render(){
         return(
             <View style={style.container}>
                 <Text style={style.title}>Home</Text>
+                {this.state.posteos.length === 0 ?
+                    <ActivityIndicator size='large' color='green'/>
+                    :
+                    <FlatList 
+                        data={this.state.posteos}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({item}) => <Card data={item}/>}
+                    />
+                }
             </View>
         )
     }
