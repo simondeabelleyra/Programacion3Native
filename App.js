@@ -4,6 +4,7 @@ import Login from './src/screens/Login';
 import Register from './src/screens/Register';
 import TabNavigation from './src/screens/TabNavigation';
 
+
 export default function App() {
 
   const Stack = createNativeStackNavigator();

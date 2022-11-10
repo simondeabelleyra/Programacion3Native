@@ -1,6 +1,7 @@
 import { React, Component } from 'react';
-import { TouchableOpacity, View, TextInput, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, View, TextInput, Text, StyleSheet,CheckBox} from 'react-native';
 import { auth } from '../firebase/config'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Login extends Component {
     constructor(props) {
@@ -11,19 +12,43 @@ class Login extends Component {
             password: '',
             error: '',
             success: '',
-            login: false
+            login: false,
+            rememberMe:false,
+            username:''
+            
         }
     }
 
+    toggleRememberMe = value => {
+        this.setState({ rememberMe: value })
+          if (value === true)
+           {
+        
+          this.rememberUser();
+        } else {
+          this.forgetUser();
+        }
+      }
+     
+      rememberUser = async () => {
+        try {
+          await AsyncStorage.setItem('10', this.state.userName);
+        } catch (error) {
+          
+        }}
+
     onSubmit() {
         auth.signInWithEmailAndPassword(this.state.email, this.state.password)
-            .then(res =>{ this.setState({login: true})
+            .then(res => {
+                this.setState({ login: true })
                 this.props.navigation.navigate('TabNavigation')
             })
             .catch(error => this.setState({
                 error: error.message,
             }))
     }
+
+    
 
 
     render() {
@@ -40,6 +65,12 @@ class Login extends Component {
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')} style={style.btnLogin}>
                     <Text style={style.btnLoginTxt}>Registrate acá</Text>
                 </TouchableOpacity>
+
+                <CheckBox
+                    value={this.state.rememberMe}
+                    onValueChange={(value) => this.toggleRememberMe(value)}
+                /><Text style={style.btnLoginTxt}>Remember Me</Text>
+
             </View>
         );
     }

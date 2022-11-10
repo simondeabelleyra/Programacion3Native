@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View, TextInput, Text, StyleSheet } from 'react-native'
-import { auth } from '../firebase/config';
+import { auth,db } from '../firebase/config';
+
 
 class Register extends Component {
     constructor(props) {
@@ -17,7 +18,24 @@ class Register extends Component {
 
     onSubmit() {
         auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
-            .then(res => this.state.navigation.navigate('Login'))
+            .then(res => {
+                db.collection('users').add({
+                    owner: this.state.email,
+                    userName: this.state.user,
+                    bio: this.state.bio,
+                    createdAt: Date.now()
+                })
+            .then(() => {
+                this.setState({
+                    email: '',
+                    user: '',
+                    password: '',
+                    bio: '',
+                    error: ''
+                })
+                this.state.navigation.navigate('Login')})
+            })
+                
             .catch(error => this.setState({
                 error: error.message
             }))
