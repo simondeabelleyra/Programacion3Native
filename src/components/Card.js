@@ -32,7 +32,8 @@ const style = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'rgb(150,150,150)',
         borderStyle: 'solid',
-        borderRadius: 8
+        borderRadius: 8,
+        backgroundColor: 'rgb(0,0,0)'
     },
     creador: {
         fontWeight: 600,

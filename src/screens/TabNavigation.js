@@ -16,21 +16,21 @@ export default function TabNavigation(){
             name='Home' 
             component={ Home }
             options={
-              {tabBarIcon: () => <FontAwesome name="home" size={24} color="black" />}
+              {tabBarIcon: () => <FontAwesome name="home" size={24} color="black" />, headerShown: false}
             }
             />
             <Tab.Screen 
             name='AddPost'
             component={AddPost}
             options={
-              {tabBarIcon: () => <AntDesign name="plus" size={24} color="black" />}
+              {tabBarIcon: () => <AntDesign name="plus" size={24} color="black" />, headerShown: false}
             }
             />
             { <Tab.Screen 
             name='Profile' 
             component={ Profile }
             options={
-              {tabBarIcon: () => <Ionicons name="man-sharp" size={24} color="black" />}
+              {tabBarIcon: () => <Ionicons name="person-circle-outline" size={24} color="black" />, headerShown: false}
             }
             /> }
           </Tab.Navigator>

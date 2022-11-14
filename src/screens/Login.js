@@ -1,7 +1,6 @@
 import { React, Component } from 'react';
 import { TouchableOpacity, View, TextInput, Text, StyleSheet,CheckBox} from 'react-native';
 import { auth } from '../firebase/config'
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class Login extends Component {
     constructor(props) {

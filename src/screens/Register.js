@@ -12,7 +12,8 @@ class Register extends Component {
             user: '',
             password: '',
             bio: '',
-            error: ''
+            error: '',
+            photo: ''
         }
     }
 
@@ -23,7 +24,8 @@ class Register extends Component {
                     owner: this.state.email,
                     userName: this.state.user,
                     bio: this.state.bio,
-                    createdAt: Date.now()
+                    createdAt: Date.now(),
+                    photo: this.state.photo
                 })
             .then(() => {
                 this.setState({
@@ -33,7 +35,7 @@ class Register extends Component {
                     bio: '',
                     error: ''
                 })
-                this.state.navigation.navigate('Login')})
+                this.props.navigation.navigate('Login')})
             })
                 
             .catch(error => this.setState({
