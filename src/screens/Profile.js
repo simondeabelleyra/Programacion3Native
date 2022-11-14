@@ -1,56 +1,50 @@
 import React, { Component } from 'react';
-import {View, Text, StyleSheet, FlatList} from 'react-native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { db } from '../firebase/config';
+import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { auth, db } from '../firebase/config';
 
 
-const Stack = createNativeStackNavigator();
+
 
 class Profile extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            posteos: [],
-            props: props,
-            username:''
-            
-        }
-    }
-
-
-    async componentDidMount() {
-        const username = await this.getRememberedUser();
-        this.setState({
-            username: username || '',
-            rememberMe: username ? true : false
-        });
-        
-    }
-    getRememberedUser = async () => {
-        try {
-            const username = await AsyncStorage.getItem('10');
-            if (username !== null) {
-
-                 db.FindBy(username)
-    
-                
-            }
-            
-        } catch (error) {
+            userData: [],
+            props: props
 
         }
     }
 
-   
+
+    componentDidMount() {
+        db.collection('users').where('owner', '==', auth.currentUser.email).onSnapshot(
+            docs => {
+                let data = [];
+                docs.forEach(doc => {
+                    data.push({
+                        id: doc.id,
+                        data: doc.data()
+                    })
+                    this.setState({
+                        userData: data,
+                        loading: false
+                    })
+
+                })
+            })
+
+    }
+
+
 
 
 
 
     render() {
+        console.log(auth.currentUser.email)
         return (
             <View>
-        <Text>{}</Text>
+                <Text>{JSON.stringify(this.state.userData)}</Text>
 
             </View>
 

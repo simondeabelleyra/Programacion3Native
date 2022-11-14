@@ -19,23 +19,9 @@ class Login extends Component {
         }
     }
 
-    toggleRememberMe = value => {
-        this.setState({ rememberMe: value })
-          if (value === true)
-           {
-        
-          this.rememberUser();
-        } else {
-          this.forgetUser();
-        }
-      }
+    
      
-      rememberUser = async () => {
-        try {
-          await AsyncStorage.setItem('10', this.state.userName);
-        } catch (error) {
-          
-        }}
+     
 
     onSubmit() {
         auth.signInWithEmailAndPassword(this.state.email, this.state.password)
