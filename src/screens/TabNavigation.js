@@ -2,37 +2,46 @@ import React, { Component } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Home from "./Home";
 import { FontAwesome, Ionicons, AntDesign } from '@expo/vector-icons';
- import Profile from "./Profile"; 
+import Profile from "./Profile";
 import AddPost from "./AddPost";
+import Search from "./Search";
 
 
-export default function TabNavigation(){
+export default function TabNavigation() {
 
-    const Tab = createBottomTabNavigator();
+  const Tab = createBottomTabNavigator();
 
-    return(
-          <Tab.Navigator screenOptions={ { tabBarShowLabel: false } }>
-            <Tab.Screen 
-            name='Home' 
-            component={ Home }
-            options={
-              {tabBarIcon: () => <FontAwesome name="home" size={24} color="black" />, headerShown: false}
-            }
-            />
-            <Tab.Screen 
-            name='AddPost'
-            component={AddPost}
-            options={
-              {tabBarIcon: () => <AntDesign name="plus" size={24} color="black" />, headerShown: false}
-            }
-            />
-            { <Tab.Screen 
-            name='Profile' 
-            component={ Profile }
-            options={
-              {tabBarIcon: () => <Ionicons name="person-circle-outline" size={24} color="black" />, headerShown: false}
-            }
-            /> }
-          </Tab.Navigator>
-      )
+  return (
+    <Tab.Navigator screenOptions={{ tabBarShowLabel: false }}>
+      <Tab.Screen
+        name='Home'
+        component={Home}
+        options={
+          { tabBarIcon: () => <FontAwesome name="home" size={24} color="black" />, headerShown: false }
+        }
+      />
+      <Tab.Screen
+        name='AddPost'
+        component={AddPost}
+        options={
+          { tabBarIcon: () => <AntDesign name="plus" size={24} color="black" />, headerShown: false }
+        }
+      />
+      {<Tab.Screen
+        name='Profile'
+        component={Profile}
+        options={
+          { tabBarIcon: () => <Ionicons name="person-circle-outline" size={24} color="black" />, headerShown: false }
+        }
+      />}
+
+      {<Tab.Screen
+        name='Search'
+        component={Search}
+        options={
+          { tabBarIcon: () => <Ionicons name="person-circle-outline" size={24} color="black" />, headerShown: false }
+        }
+      />}
+    </Tab.Navigator>
+  )
 }
