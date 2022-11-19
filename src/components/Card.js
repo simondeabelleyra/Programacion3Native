@@ -1,9 +1,9 @@
 import {React, Component} from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { db, auth } from '../firebase/config';
 import firebase from "firebase";
-import { TouchableOpacity } from "react-native-web";
-import { FontAwesome, AntDesign } from '@expo/vector-icons';
+import { FontAwesome, AntDesign, Entypo, FontAwesome5 } from '@expo/vector-icons';
+import Comment from "../screens/Comment";
 
 
 class Card extends Component{
@@ -12,7 +12,7 @@ class Card extends Component{
         this.state = {
             props: props,
             cantidadDeLikes: this.props.data.data.likes.length,
-            miLike: false,
+            miLike: false
         }
     };
 
@@ -25,7 +25,6 @@ class Card extends Component{
         } 
         
     }
-
 
     botonLike(){
         if(this.state.miLike === true){
@@ -68,42 +67,55 @@ class Card extends Component{
 
     render(){
         return(
-            <View style={style.cardContainer}>
-                <Text style={style.creador}>{this.props.data.data.owner}</Text>
-                <Image 
-                    style={style.image}
-                    source={{uri: this.props.data.data.photo}}
-                />
-                <Text style={style.contenido}>{this.props.data.data.description}</Text>
-                <TouchableOpacity onPress={()=>this.botonLike()}>
-                    {this.state.miLike === false?
-                    <AntDesign name="hearto" size={24} color="white" />
+                <View style={style.cardContainer}>
+                    <Text style={style.creador}>{this.props.data.data.owner}</Text>
+                    <Image
+                        style={style.image}
+                        source={{ uri: this.props.data.data.photo }}
+                    />
+                    <Text style={style.contenido}>{this.props.data.data.description}</Text>
+                    <View style={style.btnContainer}>
+                        <TouchableOpacity onPress={() => this.botonLike()}>
+                            {this.state.miLike === false ?
+                                <AntDesign name="hearto" size={24} color="white" />
+
+                                : <AntDesign name="heart" size={24} color="#0d9900" />
+                            }
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={()=> this.props.homeProps.navigation.navigate('Comment', {id: this.props.data.id})}>
+                            <FontAwesome5 style={style.btnComment} name="comment" size={24} color="white" />
+                        </TouchableOpacity>
+                    </View>
+                    <Text style={style.contenido}>{this.state.cantidadDeLikes} likes</Text>
+                    <TouchableOpacity onPress={()=> this.props.homeProps.navigation.navigate('Comment', {id: this.props.data.id})}>
+                        <Text style={style.contenido}>{this.props.data.data.comments.length} comentarios</Text>
+                    </TouchableOpacity>
                     
-                    : <AntDesign name="heart" size={24} color="white" />
-                }
-                    
-                </TouchableOpacity>
-                <Text style={style.contenido}>likes: {this.state.cantidadDeLikes} </Text>
-                <Text style={style.contenido}>{this.props.data.data.comments.length} comentarios</Text>
-            </View>
+                </View> 
         )
     }
 }
 
 const style = StyleSheet.create({
     cardContainer: {
-        margin: 10,
         padding: 15,
-        borderWidth: 1,
-        borderColor: 'rgb(150,150,150)',
+        borderBottomWidth: 2,
+        borderColor: 'rgb(180,180,180)',
         borderStyle: 'solid',
-        borderRadius: 8
+        width: '100vw'
     },
     creador: {
         fontWeight: 600,
         color: 'rgb(230,230,230)',
         fontSize: 18,
         marginBottom: 3
+    },
+    btnContainer: {
+        flexDirection: 'row',
+        flex: 2,
+    },
+    btnComment: {
+        marginLeft: 8
     },
     contenido: {
         fontSize: 16,
@@ -113,6 +125,13 @@ const style = StyleSheet.create({
     image: {
         width: '100%',
         height: '200px'
+    },
+    containerComments: {
+        height: '100vh',
+        width: '100vw',
+    },
+    crossComments: {
+        marginBottom: 15
     }
 })
 

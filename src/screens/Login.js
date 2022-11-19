@@ -1,5 +1,5 @@
 import { React, Component } from 'react';
-import { TouchableOpacity, View, TextInput, Text, StyleSheet, CheckBox } from 'react-native';
+import { TouchableOpacity, View, TextInput, Text, StyleSheet } from 'react-native';
 import { auth } from '../firebase/config';
 
 class Login extends Component {
@@ -15,19 +15,17 @@ class Login extends Component {
             rememberMe:false,
             username:'',
             completed: false,
-        }
+        }  
     }
      
     componentDidMount(){
-        if(this.state.email.length >= 4 && this.state.password.length >= 4){
-            this.setState({
-                completed: true
-            })
-        } else {
-            this.setState({
-                completed: false
-            })
-        }  
+        auth.onAuthStateChanged(
+            user => {
+                if(user) {
+                    this.props.navigation.navigate('TabNavigation')
+                }
+            }
+        )
     }
 
     onSubmit() {
@@ -104,11 +102,6 @@ class Login extends Component {
                 <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')} style={style.btnLogin}>
                     <Text style={style.btnLoginTxt}>Registrate acá</Text>
                 </TouchableOpacity>
-
-                <CheckBox
-                    value={this.state.rememberMe}
-                    onValueChange={(value) => this.toggleRememberMe(value)}
-                /><Text style={style.btnLoginTxt}>Remember Me</Text>
 
             </View>
         );

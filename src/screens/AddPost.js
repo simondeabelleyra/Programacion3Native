@@ -74,7 +74,7 @@ class AddPost extends Component {
                             source={{uri: this.state.photo}}
                         />: null}
                         <TouchableOpacity onPress={() => this.crearPost()} style={style.btnPost}>
-                            <Text style={style.textBtn}>Post</Text>
+                            <Text style={style.textBtn}>Compartir</Text>
                         </TouchableOpacity>
                     </React.Fragment>
                 : 
@@ -109,8 +109,13 @@ const style = StyleSheet.create({
         border: 'solid',
         borderWidth: 1,
         borderColor: 'rgb(150,150,150)',
+        borderLeftColor: 'white',
+        borderTopColor: 'white',
+        borderRightColor: 'white',
+        borderBottomColor: 'white',
+        borderTopRightRadius: 8,
+        borderBottomLeftRadius: 8,
         borderStyle: 'solid',
-        borderRadius: 8,
         padding: 7.5,
         width: '30%',
     },

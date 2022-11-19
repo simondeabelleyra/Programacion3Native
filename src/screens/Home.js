@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
-import { TextInput } from 'react-native-web';
-
+import { TouchableOpacity, View, Text, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native';
+import logo from '../../assets/logo.png';
 import Card from '../components/Card';
 import { db } from '../firebase/config';
 
@@ -34,15 +33,17 @@ class Home extends Component {
     render() {
         return (
             <View style={style.container}>
-                
-                <Text style={style.title}>Home</Text>
+                <Image
+                    style={style.image}
+                    source={logo}
+                />
                 {this.state.posteos.length === 0 ?
                     <ActivityIndicator size='large' color='green' />
                     :
                     <FlatList
                         data={this.state.posteos}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => <Card data={item} />}
+                        renderItem={({ item }) => <Card data={item} homeProps={this.props} />}
                     />
                     
                 }
@@ -59,8 +60,15 @@ const style = StyleSheet.create({
         flex: 1,
         backgroundColor: 'rgb(0,0,0)',
         color: 'rgb(255,255,255)',
-        padding: 15,
         justifyContent: 'center',
+        alignItems: 'center'
+    },
+    image: {
+        textAlign: 'center',
+        width: '40vw',
+        height: undefined,
+        aspectRatio: 20 / 10,
+        margin: 10
     },
     title: {
         fontWeight: 600,

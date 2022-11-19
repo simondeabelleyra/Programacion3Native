@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, FlatList } from 'react-native'
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native'
 import { auth, db } from '../firebase/config';
 import avatar from '../../assets/avatar.jpeg';
 import Card from '../components/Card';
-
-
 
 
 class Profile extends Component {
@@ -46,7 +44,10 @@ class Profile extends Component {
     }
 
 
-
+    logout(){
+        auth.signOut()
+        .then(()=> this.props.navigation.navigate('Login'))
+    }
 
 
 
@@ -64,8 +65,13 @@ class Profile extends Component {
                                 <Text style={style.bio}>{this.state.userData.bio}</Text>
                             : null}
                         <Text style={style.bio}>Cantidad de posteos: {this.state.posteos.length}</Text>
+                        <TouchableOpacity onPress={() => this.logout()}>
+                            <Text style={style.logout}>Cerrar sesión</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
+                
+                
                 <FlatList 
                         style={style.posteos}
                         data={this.state.posteos}
@@ -115,6 +121,9 @@ const style = StyleSheet.create({
     },
     posteos: {
         marginTop: 120
+    },
+    logout: {
+        color: '#0d9900'
     }
 })
 
