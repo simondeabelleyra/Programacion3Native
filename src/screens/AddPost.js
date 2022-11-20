@@ -78,7 +78,12 @@ class AddPost extends Component {
                         </TouchableOpacity>
                     </React.Fragment>
                 : 
-                    <CameraPost style={style.cameraComponent} onImageUpload={(url) => this.onImageUpload(url)}/>
+                    <View style={style.camView}>
+                        <CameraPost style={style.cameraComponent} onImageUpload={(url) => this.onImageUpload(url)} />
+                        <TouchableOpacity onPress={() => this.setState({ cameraOpen: false })} style={style.btnOff}>
+                            <Entypo name="circle-with-cross" size={40} color="red" />
+                        </TouchableOpacity>
+                    </View>
                 }
             </View>
         )
@@ -104,6 +109,15 @@ const style = StyleSheet.create({
     title: {
         fontSize: 22,
         fontWeight: '600'
+    },
+    btnOff: {
+        position: 'absolute',  
+        right: 5, 
+        top: 5
+    },
+    camView: {
+        width: '100%',
+        height: '100%'
     },
     btnPost: {
         border: 'solid',

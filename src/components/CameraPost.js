@@ -76,7 +76,7 @@ class CameraPost extends Component{
                             ref={metodosDeCamara => this.metodosDeCamara = metodosDeCamara}
                         />
                         <TouchableOpacity onPress={() => this.takePicture()} style={style.btnCapture}>
-                            <MaterialIcons name="radio-button-off" size={28} color="black" />
+                            <Ionicons name="radio-button-on-sharp" size={66} color="green" />
                         </TouchableOpacity>
                     </React.Fragment>
                 : null}
@@ -86,12 +86,14 @@ class CameraPost extends Component{
                             style={style.image}
                             source={{ uri: this.state.photo }}
                         />
-                        <TouchableOpacity onPress={() => this.savePhoto()} style={style.btnCapture}>
-                            <AntDesign name="checkcircle" size={24} color="green" />
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.clearPhoto()} style={style.btnCapture}>
-                            <Entypo name="circle-with-cross" size={24} color="red" />
-                        </TouchableOpacity>
+                        <View style={style.checksDiv}>
+                            <TouchableOpacity onPress={() => this.clearPhoto()}>
+                                <Ionicons name="md-trash-sharp" size={40} color="red" />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.savePhoto()}>
+                                <AntDesign name="checkcircle" size={40} color="green" />
+                            </TouchableOpacity>
+                        </View>
                     </React.Fragment>
                     :
                     null
@@ -103,28 +105,45 @@ class CameraPost extends Component{
 
 const style = StyleSheet.create({
     container: {
-        position: 'absolute',
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh'
+        width: '100%',
+        height: '100%'
     },
     camera: {
-        position: 'absolute',
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh'
+        width: '100%',
+        height: '100%'
     },
     btnCapture: {
-        textAlign: 'center'
+        position: 'absolute', 
+        left: 0, 
+        right: 0, 
+        bottom: 0,  
+        alignItems: 'center'
+    },
+    btnOff: {
+        position: 'absolute',  
+        right: 5, 
+        top: 5
     },
     image: {
         position: 'absolute',
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh'
+        width: '100%',
+        height: '100%'
+    },
+    checksDiv:{ 
+        position: 'absolute', 
+        flexDirection: 'row',
+        flex: 2,
+        left: 0, 
+        right: 0, 
+        bottom: 0,  
+        alignItems: 'center',
+        justifyContent: 'space-between'
     }
 })
 

@@ -16,7 +16,7 @@ export default function TabNavigation() {
       screenOptions={{ tabBarShowLabel: false,
         
           "tabBarActiveBackgroundColor": "#000000",
-          "tabBarInactiveBackgroundColor": "#141414",
+          "tabBarInactiveBackgroundColor": "#181818",
           "tabBarStyle": [
             {
               "display": "flex"

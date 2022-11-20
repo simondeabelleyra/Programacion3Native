@@ -23,7 +23,6 @@ class Card extends Component{
                 miLike: true
             })
         } 
-        
     }
 
     botonLike(){
@@ -68,7 +67,9 @@ class Card extends Component{
     render(){
         return(
                 <View style={style.cardContainer}>
-                    <Text style={style.creador}>{this.props.data.data.owner}</Text>
+                    <TouchableOpacity onPress={()=> this.props.homeProps.navigation.navigate('UsersProfile', {email: this.props.data.data.owner})}>
+                        <Text style={style.creador}>{this.props.data.data.owner}</Text>
+                    </TouchableOpacity>
                     <Image
                         style={style.image}
                         source={{ uri: this.props.data.data.photo }}
@@ -99,7 +100,7 @@ class Card extends Component{
 const style = StyleSheet.create({
     cardContainer: {
         padding: 15,
-        borderBottomWidth: 2,
+        borderBottomWidth: 1,
         borderColor: 'rgb(180,180,180)',
         borderStyle: 'solid',
         width: '100vw'
@@ -124,7 +125,7 @@ const style = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: '200px'
+        height: 200
     },
     containerComments: {
         height: '100vh',

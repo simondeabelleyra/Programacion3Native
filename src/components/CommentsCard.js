@@ -13,7 +13,9 @@ class CommentsCard extends Component{
     render(){
         return(
             <View style={style.container}>
-                <Text style={style.owner}>{this.props.data.owner}</Text>
+                <TouchableOpacity onPress={()=> this.props.commentsProps.navigation.navigate('UsersProfile', {email: this.props.data.owner})}>
+                    <Text style={style.owner}>{this.props.data.owner}</Text>
+                </TouchableOpacity>
                 <Text style={style.content}>{this.props.data.content}</Text>
             </View>
         )

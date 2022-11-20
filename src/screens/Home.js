@@ -41,6 +41,7 @@ class Home extends Component {
                     <ActivityIndicator size='large' color='green' />
                     :
                     <FlatList
+                        style={style.flatList}
                         data={this.state.posteos}
                         keyExtractor={item => item.id.toString()}
                         renderItem={({ item }) => <Card data={item} homeProps={this.props} />}
@@ -65,7 +66,7 @@ const style = StyleSheet.create({
     },
     image: {
         textAlign: 'center',
-        width: '40vw',
+        width: '40%',
         height: undefined,
         aspectRatio: 20 / 10,
         margin: 10
@@ -75,6 +76,9 @@ const style = StyleSheet.create({
         color: 'rgb(255,255,255)',
         fontSize: 24,
         textAlign: 'center'
+    },
+    flatList: {
+        width: '100%'
     }
 })
 

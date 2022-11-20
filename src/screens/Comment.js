@@ -55,7 +55,7 @@ class Comment extends Component{
                 :
                 <FlatList
                     data={this.state.comentarios}
-                    renderItem={({ item }) => <CommentsCard data={item} />}
+                    renderItem={({ item }) => <CommentsCard data={item} commentsProps={this.props}/>}
                 /> 
                 }
                 <View style={style.flex}>
