@@ -7,9 +7,8 @@ class Search extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            props: props,
-            valorBusqueda: '',
-            users: {},
+            users: [],
+            searchText: '',
             filteredUsers: [],
             filteredMail: [],
             userErr: false,
@@ -25,19 +24,27 @@ class Search extends Component {
 
         return (
             <View style={style.container}>
+                {this.state.emptysearch !== '' ?
+               
+               <Text style={style.error}>{this.state.emptysearch}</Text>
+                
+                : <></>}
+            
                 <TextInput style={style.input}
                     keyboardType='search'
                     placeholder='Busca a tus amigos'
                     onChangeText={text => {
                         if (text == '') {
-                            this.setState({ emptysearch: 'Ingrese datos de busqueda', valorBusqueda: text, userErr: false, mailErr: false });
+                            this.setState({ emptysearch: 'Ingrese datos de busqueda', searchText: text, userErr: false, mailErr: false });
                         } else {
-                            this.setState({ emptysearch: '', valorBusqueda: text });
+                            this.setState({ emptysearch: '', searchText: text });
                             this.preventSubmmit()
+                            console.log(this.state.filteredUsers)
+                            console.log(this.state.filteredMail);
                         }
                     }}
 
-                    value={this.state.valorBusqueda}
+                    value={this.state.searchText}
                 />
 
                 <TouchableOpacity onPress={() => this.clear()} style={style.btnSearch}>
@@ -46,10 +53,11 @@ class Search extends Component {
 
                 {this.state.userErr ?
 
-                    <Text>El usuario{this.state.valorBusqueda} no existe</Text>
+                    <Text style={style.error}>El usuario {this.state.searchText} no existe</Text>
                     :
-                    this.state.valorBusqueda != '' ?
+                    this.state.searchText != '' ?
                         <View>
+                            <Text>Nombres de usuario</Text>
                             <FlatList
                                 data={this.state.filteredUsers}
                                 keyExtractor={item => item.id.toString()}
@@ -58,14 +66,14 @@ class Search extends Component {
                         </View>
 
                         :
-                        <>/</>
+                        <></>
                 }
 
                 {this.state.mailErr ?
 
-                    <Text>El mailErr{this.state.valorBusqueda} no existe</Text>
+                    <Text style={style.error}>El mail {this.state.searchText} no existe</Text>
                     :
-                    this.state.valorBusqueda != '' ?
+                    this.state.searchText != '' ?
                         <View>
                             <FlatList
                                 data={this.state.filteredMail}
@@ -75,7 +83,7 @@ class Search extends Component {
                         </View>
 
                         :
-                        <>/</>
+                        <></>
                 }
 
 
@@ -104,9 +112,9 @@ class Search extends Component {
 
     preventSubmmit() {
 
-        let textTofilter = this.state.valorBusqueda.toLowerCase()
+        let textTofilter = this.state.searchText.toLowerCase()
 
-        const filteredUsers = this.state.users.filter(users => users.data.name?.toLowerCase().includes(textTofilter))
+        const filteredUsers = this.state.users.filter(users => users.data.userName?.toLowerCase().includes(textTofilter))
         const filteredMail = this.state.users.filter(users => users.data.owner?.toLowerCase().includes(textTofilter))
 
         if (filteredUsers == '') {
@@ -124,7 +132,7 @@ class Search extends Component {
     clear() {
         this.setState({
             results: [],
-            valorBusqueda: '',
+            searchText: '',
             userErr: false,
             mailErr: false
         })

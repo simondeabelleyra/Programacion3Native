@@ -19,7 +19,7 @@ class CardSearch extends Component{
                 />
                 <Text style={style.contenido}>{this.props.data.data.bio}</Text>
                 
-                <Text style={style.contenido}>{this.props.data.data.username}</Text>
+                <Text style={style.contenido}> Nombre de usuario: {this.props.data.data.userName}</Text>
             </View>
         )
     }
