@@ -17,9 +17,9 @@ class CardSearch extends Component{
                     style={style.image}
                     source={{uri: this.props.data.data.photo}}
                 />
-                <Text style={style.contenido}>{this.props.data.data.description}</Text>
-                <Text style={style.contenido}>{this.props.data.data.likes.length} likes</Text>
-                <Text style={style.contenido}>{this.props.data.data.comments.length} comentarios</Text>
+                <Text style={style.contenido}>{this.props.data.data.bio}</Text>
+                
+                <Text style={style.contenido}>{this.props.data.data.username}</Text>
             </View>
         )
     }
