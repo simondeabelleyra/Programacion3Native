@@ -27,8 +27,16 @@ class Card extends Component{
 
     botonLike(){
         if(this.state.miLike === true){
+            this.setState({
+                miLike: false,
+                cantidadDeLikes: this.state.cantidadDeLikes -1,
+            })
             this.disLike()
         } else{
+            this.setState({
+                miLike: true,
+                cantidadDeLikes: this.state.cantidadDeLikes +1,
+            })
             this.likes()
         }
     }
@@ -40,10 +48,7 @@ class Card extends Component{
             likes: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email)
         })
         .then(()=> 
-            this.setState({
-                cantidadDeLikes: this.state.cantidadDeLikes + 1,
-                miLike: true
-            })
+        console.log('like')
            )
         .catch(error=>console.log(error))
     }
@@ -55,10 +60,7 @@ class Card extends Component{
             likes: firebase.firestore.FieldValue.arrayRemove(auth.currentUser.email)
         })
         .then(()=> 
-            this.setState({
-                cantidadDeLikes: this.state.cantidadDeLikes -1,
-                miLike: false
-            })
+            console.log('disLike')
            )
         .catch(error=>console.log(error))
     }

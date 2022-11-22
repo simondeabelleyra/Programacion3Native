@@ -22,11 +22,12 @@ class Comment extends Component{
             docs => {
                 docs.forEach(doc => {
                     this.setState({
-                        comentarios: doc.data().comments
+                        comentarios: doc.data().comments.reverse()
                     })
                 });
             }
         )
+
     }
 
     comment(){
@@ -34,6 +35,7 @@ class Comment extends Component{
         .doc(this.props.route.params.id)
         .update({
             comments: firebase.firestore.FieldValue.arrayUnion({
+                createdAt: Date.now(),
                 owner: auth.currentUser.email,
                 content: this.state.comentario
             })
