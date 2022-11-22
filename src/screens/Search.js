@@ -9,55 +9,127 @@ class Search extends Component {
         this.state = {
             props: props,
             valorBusqueda: '',
-            usersFiltrados:{}
+            users: {},
+            filteredUsers: [],
+            filteredMail: [],
+            userErr: false,
+            mailErr: false,
+            emptysearch: ''
+
         }
     };
 
-    
+
     render() {
-        
-        console.log(this.state.usersFiltrados)
-        console.log(this.state.valorBusqueda);
+
+
         return (
             <View style={style.container}>
                 <TextInput style={style.input}
                     keyboardType='search'
                     placeholder='Busca a tus amigos'
-                    onChangeText={text => this.setState({ valorBusqueda: text })}
-                    value={this.state.valorBusqueda} />
-                <TouchableOpacity onPress={() => this.filtrarUsers()} style={style.btnSearch}>
-                    <Text style={style.btnSearchTxt}> Search </Text>
+                    onChangeText={text => {
+                        if (text == '') {
+                            this.setState({ emptysearch: 'Ingrese datos de busqueda', valorBusqueda: text, userErr: false, mailErr: false });
+                        } else {
+                            this.setState({ emptysearch: '', valorBusqueda: text });
+                            this.preventSubmmit()
+                        }
+                    }}
+
+                    value={this.state.valorBusqueda}
+                />
+
+                <TouchableOpacity onPress={() => this.clear()} style={style.btnSearch}>
+                    <Text style={style.btnSearchTxt}> Borrar busqueda </Text>
                 </TouchableOpacity>
-                
-                
-                    <FlatList
-                        data={this.state.usersFiltrados}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({ item }) => <CardSearch data={item} />}
-                    />
-                    
-                
-                
-                
+
+                {this.state.userErr ?
+
+                    <Text>El usuario{this.state.valorBusqueda} no existe</Text>
+                    :
+                    this.state.valorBusqueda != '' ?
+                        <View>
+                            <FlatList
+                                data={this.state.filteredUsers}
+                                keyExtractor={item => item.id.toString()}
+                                renderItem={({ item }) => <CardSearch data={item} />}
+                            />
+                        </View>
+
+                        :
+                        <>/</>
+                }
+
+                {this.state.mailErr ?
+
+                    <Text>El mailErr{this.state.valorBusqueda} no existe</Text>
+                    :
+                    this.state.valorBusqueda != '' ?
+                        <View>
+                            <FlatList
+                                data={this.state.filteredMail}
+                                keyExtractor={item => item.id.toString()}
+                                renderItem={({ item }) => <CardSearch data={item} />}
+                            />
+                        </View>
+
+                        :
+                        <>/</>
+                }
+
+
+
+
+
             </View>
         )
-                
+
     }
 
-    filtrarUsers(){
-        db.collection('posts').where('owner','==', this.state.valorBusqueda).onSnapshot(docs => {
-            let usersFiltrados = [];
+    componentDidMount() {
+        db.collection('users').onSnapshot(docs => {
+            let users = [];
             docs.forEach(doc => {
-                usersFiltrados.push({
+                users.push({
                     id: doc.id,
                     data: doc.data()
                 })
             });
             this.setState({
-                usersFiltrados: usersFiltrados
+                users: users
             })
         })
-    }}
+    }
+
+    preventSubmmit() {
+
+        let textTofilter = this.state.valorBusqueda.toLowerCase()
+
+        const filteredUsers = this.state.users.filter(users => users.data.name?.toLowerCase().includes(textTofilter))
+        const filteredMail = this.state.users.filter(users => users.data.owner?.toLowerCase().includes(textTofilter))
+
+        if (filteredUsers == '') {
+            this.setState({ userErr: true, filteredUsers: '' })
+        } else { this.setState({ userErr: false, filteredUsers: filteredUsers }) }
+
+
+        if (filteredMail == '') {
+            this.setState({ mailErr: true, filteredMail: '' })
+        } else { this.setState({ mailErr: false, filteredMail: filteredMail }) }
+
+
+    }
+
+    clear() {
+        this.setState({
+            results: [],
+            valorBusqueda: '',
+            userErr: false,
+            mailErr: false
+        })
+    }
+}
 const style = StyleSheet.create({
     container: {
         flex: 1,
