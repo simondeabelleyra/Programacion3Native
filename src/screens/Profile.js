@@ -76,7 +76,7 @@ class Profile extends Component {
                         style={style.posteos}
                         data={this.state.posteos}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={({item}) => <Card data={item}/>}
+                        renderItem={({item}) => <Card data={item} homeProps={this.props}/>}
                 />
             </View>
 
