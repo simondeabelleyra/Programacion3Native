@@ -129,13 +129,17 @@ class AddPost extends Component {
                             <Text style={style.mostrarCamaraTxt}><AntDesign name="camerao" size={24} color="white" /> Agregar foto</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.pickImage()} style={style.mostrarCamara}>
-                            <Text style={style.mostrarCamaraTxt}><MaterialIcons name="add-photo-alternate" size={24} color="white" /> Agregar foto</Text>
+                            <Text style={style.mostrarCamaraTxt}><MaterialIcons name="add-photo-alternate" size={24} color="white" /> Agregar foto de la galeria</Text>
                         </TouchableOpacity>
                         {this.state.photo !== '' ? 
+                        <View>
                         <Image 
                             style={style.image}
                             source={{uri: this.state.photo}}
-                        />: null}
+                        />
+                        <TouchableOpacity onPress={()=> this.setState({photo: ''})} style={style.btnDelete}><Text style={style.delete}>Borrar imagen</Text></TouchableOpacity>
+                        </View>
+                        : null}
                         <TouchableOpacity onPress={() => this.crearPost()} style={style.btnPost}>
                             <Text style={style.textBtn}>Compartir</Text>
                         </TouchableOpacity>
@@ -165,6 +169,25 @@ const style = StyleSheet.create({
     },
     error: {
         color: 'rgb(255, 0, 0)',
+    },
+    btnDelete:{
+            border: 'solid',
+            borderWidth: 1,
+            borderColor: 'rgb(255, 0, 0)',
+            borderLeftColor: 'red',
+            borderTopColor: 'red',
+            borderRightColor: 'red',
+            borderBottomColor: 'red',
+            borderTopRightRadius: 8,
+            borderBottomLeftRadius: 8,
+            borderStyle: 'solid',
+            padding: 7.5,
+            width: '30%',
+            marginVertical: 10,
+        },
+    delete: {
+        color: 'rgb(255, 0, 0)',
+        fontSize: 14,
     },
     description: {
         backgroundColor: 'rgb(255,255,255)',

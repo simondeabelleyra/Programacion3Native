@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View,  Text, StyleSheet, Image } from 'react-native'
-import { auth,db } from '../firebase/config';
+import { auth, db, storage } from '../firebase/config';
 import CameraPost from '../components/CameraPost';
-import { Entypo, AntDesign } from '@expo/vector-icons';
+import { Entypo, AntDesign, MaterialIcons } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
 
 
 class RegisterAddPhoto extends Component {
@@ -51,7 +52,40 @@ class RegisterAddPhoto extends Component {
         }
     }
 
+    pickImage = async () => {
+        let results = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [1],
+        })
+        this.handleImagePicked(results);
+       }
 
+    handleImagePicked = async (results) => {
+        try {
+          if (!results.cancelled) {
+            this.savePhoto(results.uri);
+          }
+        } catch (e) {
+          console.log(e);
+          alert("Image upload failed");
+        }
+    };
+
+    savePhoto(uploadUrl){
+        fetch(uploadUrl)
+         .then(res=>res.blob())
+         .then(image =>{
+           const ref=storage.ref(`photos/${Date.now()}.jpg`)
+           ref.put(image)
+                .then(()=>{
+                   ref.getDownloadURL()
+                        .then(url => {
+                            this.onImageUpload(url);
+                         })
+                 })
+         })
+         .catch(e=>console.log(e))
+       }
 
     render() {
         return (
@@ -63,6 +97,9 @@ class RegisterAddPhoto extends Component {
                         <Text style={style.error}></Text>
                         <TouchableOpacity onPress={() => this.mostrarCamara()} style={style.btn}>
                             <Text style={style.textBtn}><AntDesign name="camerao" size={24} color="black" /> Foto de perfil</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.pickImage()} style={style.btn}>
+                            <Text style={style.mostrarCamaraTxt}><MaterialIcons name="add-photo-alternate" size={24} color="black" /> Agregar foto de la galeria</Text>
                         </TouchableOpacity>
                         {this.state.photo !== '' ? 
                         <Image 

@@ -12,7 +12,8 @@ class Card extends Component{
         this.state = {
             props: props,
             cantidadDeLikes: this.props.data.data.likes.length,
-            miLike: false
+            miLike: false,
+            owner: false
         }
     };
 
@@ -23,6 +24,11 @@ class Card extends Component{
                 miLike: true
             })
         } 
+        if (auth.currentUser.email == this.props.data.data.owner){
+            this.setState({
+                owner: true
+            })
+        }
     }
 
     botonLike(){
@@ -65,13 +71,31 @@ class Card extends Component{
         .catch(error=>console.log(error))
     }
 
+    deletePost(){
+        db.collection("posts")
+        .doc(this.props.data.id)
+        .delete()
+        .then(() => {
+            console.log('Post eliminado');
+        }).catch((e) => {
+            console.log(e);
+        });
+    }
 
     render(){
         return(
-                <View style={style.cardContainer}>
-                    <TouchableOpacity onPress={()=> this.props.homeProps.navigation.navigate('UsersProfile', {email: this.props.data.data.owner})}>
-                        <Text style={style.creador}>{this.props.data.data.owner}</Text>
-                    </TouchableOpacity>
+            <View style={style.cardContainer}>
+                    <View style={style.flex}>
+                        <TouchableOpacity onPress={() => this.props.homeProps.navigation.navigate('UsersProfile', { email: this.props.data.data.owner })}>
+                            <Text style={style.creador}>{this.props.data.data.owner}</Text>
+                        </TouchableOpacity>
+                    
+                        {this.state.owner === true ? 
+                            <TouchableOpacity onPress={() => this.deletePost()}>
+                                <FontAwesome name="trash-o" size={24} color="red" />
+                            </TouchableOpacity>
+                        : null }
+                    </View>
                     <Image
                         style={style.image}
                         source={{ uri: this.props.data.data.photo }}
@@ -106,6 +130,12 @@ const style = StyleSheet.create({
         borderColor: 'rgb(180,180,180)',
         borderStyle: 'solid',
         width: '100vw'
+    },
+    flex: {
+        flexDirection: 'row',
+        flex: 2,
+        width: '100%',
+        justifyContent: 'space-between'
     },
     creador: {
         fontWeight: 600,

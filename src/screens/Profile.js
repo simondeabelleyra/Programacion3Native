@@ -93,7 +93,6 @@ class Profile extends Component {
 const style = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 15,
         backgroundColor: 'rgb(0,0,0)'
     },
     image: {
@@ -102,7 +101,8 @@ const style = StyleSheet.create({
     },
     containerPic: {
         flex: 2,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        marginVertical: 20,
     },
     containerText: {
         margin: 15,
