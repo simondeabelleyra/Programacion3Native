@@ -1,5 +1,6 @@
 import {React, Component} from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import avatar from '../../assets/avatar.jpeg';
 
 class CardSearch extends Component{
     constructor(props){
@@ -9,31 +10,40 @@ class CardSearch extends Component{
         }
     };
 
+    cortarTexto(texto){
+        return texto.length > 80 ? texto.substring(0, 77) + '...' : texto
+    }
+
     render(){
         return(
+            
             <View style={style.cardContainer}>
-                <Text style={style.creador}>{this.props.data.data.owner}</Text>
-                <Image 
-                    style={style.image}
-                    source={{uri: this.props.data.data.photo}}
-                />
-                <Text style={style.contenido}>{this.props.data.data.bio}</Text>
-                
-                <Text style={style.contenido}> Nombre de usuario: {this.props.data.data.userName}</Text>
+                <TouchableOpacity onPress={() => this.props.searchProps.navigation.navigate('UsersProfile', { email: this.props.data.data.owner })}>
+                    <Text style={style.creador}>{this.props.data.data.owner}</Text>
+                    <View style={style.imgYTxt}>
+                        <Image
+                            style={style.image}
+                            source={this.props.data.data.photo === '' ? avatar : this.props.data.data.photo}
+                        />
+                        <View style={style.text}>
+                            <Text style={style.contenidoBold}>{this.props.data.data.userName}</Text>
+                            <Text style={style.contenido}>{this.cortarTexto(this.props.data.data.bio)}</Text>
+                        </View>
+                    </View>
+                </TouchableOpacity>
             </View>
+            
         )
     }
 }
 
 const style = StyleSheet.create({
     cardContainer: {
-        margin: 10,
         padding: 15,
-        borderWidth: 1,
-        borderColor: 'rgb(150,150,150)',
+        borderBottomWidth: 1,
+        borderColor: 'rgb(180,180,180)',
         borderStyle: 'solid',
-        borderRadius: 8,
-        backgroundColor: 'rgb(0,0,0)'
+        width: '100%'
     },
     creador: {
         fontWeight: 600,
@@ -46,9 +56,24 @@ const style = StyleSheet.create({
         color: 'rgb(230,230,230)',
         marginTop: 3
     },
+    contenidoBold: {
+        fontSize: 16,
+        color: 'rgb(230,230,230)',
+        marginTop: 3,
+        fontWeight: '600'
+    },
     image: {
-        width: '100%',
-        height: '200px'
+        width: 70,
+        height: 70,
+        resizeMode: 'contain',
+        marginRight: 5
+    },
+    imgYTxt: {
+        flexDirection: 'row',
+        flex: 2
+    },
+    text: {
+        width: '85%'
     }
 })
 

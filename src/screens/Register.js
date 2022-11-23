@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { TouchableOpacity, View, TextInput, Text, StyleSheet } from 'react-native'
+import { TouchableOpacity, View, TextInput, Text, StyleSheet, TouchableNativeFeedback } from 'react-native'
 import { auth,db } from '../firebase/config';
+import CameraPost from '../components/CameraPost';
+import { Entypo, AntDesign } from '@expo/vector-icons';
 
 
 class Register extends Component {
@@ -13,68 +15,88 @@ class Register extends Component {
             password: '',
             bio: '',
             error: '',
-            photo: ''
+            cameraOpen: false
         }
+    }
+
+    onImageUpload(url) {
+        this.setState({
+            photo: url,
+            cameraOpen: false
+        })
     }
 
     onSubmit() {
         auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(res => {
                 db.collection('users').add({
-                    owner: this.state.email,
+                    owner: this.state.email.toLowerCase(),
                     userName: this.state.user,
                     bio: this.state.bio,
                     createdAt: Date.now(),
-                    photo: this.state.photo
+                    photo: ''
                 })
-            .then(() => {
-                this.setState({
-                    email: '',
-                    user: '',
-                    password: '',
-                    bio: '',
-                    error: ''
-                })
-                this.props.navigation.navigate('Login')})
+                .then((createdUser) => this.props.navigation.navigate('RegisterAddPhoto', {id: createdUser.id}))
             })
-                
             .catch(error => this.setState({
                 error: error.message
             }))
     }
+
+    mostrarCamara() {
+        this.setState({
+            cameraOpen: true
+        })
+    }
+
+
 
     render() {
         return (
             <View style={style.container} >
                 <Text style={style.title}>REGISTER</Text>
                 {this.state.error !== '' ? <Text style={style.error}>{this.state.error}</Text> : null}
-                <TextInput style={style.input}
-                    keyboardType='email-address'
-                    placeholder='email'
-                    onChangeText={text => this.setState({ email: text })}
-                    value={this.state.email} />
-                <TextInput style={style.input}
-                    keyboardType='default'
-                    placeholder='usuario'
-                    onChangeText={text => this.setState({ user: text })}
-                    value={this.state.user} />
-                <TextInput style={style.input}
-                    keyboardType='default'
-                    placeholder='contraseña'
-                    secureTextEntry={true}
-                    onChangeText={text => this.setState({ password: text })}
-                    value={this.state.password} />
-                <TextInput style={style.input}
-                    keyboardType='default'
-                    placeholder='bio'
-                    onChangeText={text => this.setState({ bio: text })}
-                    value={this.state.bio} />
-                <TouchableOpacity onPress={() => this.onSubmit()} style={style.btnLogin}>
-                    <Text style={style.btnLoginTxt}>Registrar</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={style.btnLogin}>
-                    <Text style={style.btnLoginTxt}>Si ya tenés un usuario, logueate acá</Text>
-                </TouchableOpacity>
+                {this.state.cameraOpen === false ?
+                    <View>
+                        <TextInput style={style.input}
+                            keyboardType='email-address'
+                            placeholder='email'
+                            onChangeText={text => this.setState({ email: text })}
+                            value={this.state.email} />
+                        <TextInput style={style.input}
+                            keyboardType='default'
+                            placeholder='usuario'
+                            onChangeText={text => this.setState({ user: text })}
+                            value={this.state.user} />
+                        <TextInput style={style.input}
+                            keyboardType='default'
+                            placeholder='contraseña'
+                            secureTextEntry={true}
+                            onChangeText={text => this.setState({ password: text })}
+                            value={this.state.password} />
+                        <TextInput style={style.input}
+                            keyboardType='default'
+                            placeholder='bio'
+                            onChangeText={text => this.setState({ bio: text })}
+                            value={this.state.bio} />
+                        {/* <TouchableOpacity onPress={() => this.mostrarCamara()} style={style.input}>
+                            <Text style={style.textBtn}><AntDesign name="camerao" size={24} color="black" /> Foto de perfil</Text>
+                        </TouchableOpacity> */}
+                        <TouchableOpacity onPress={() => this.onSubmit()} style={style.btnLogin}>
+                            <Text style={style.btnLoginTxt}>Registrar</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={style.btnLogin}>
+                            <Text style={style.btnLoginTxt}>Si ya tenés un usuario, logueate acá</Text>
+                        </TouchableOpacity>
+                    </View>
+                    :
+                    <View style={style.camView}>
+                        <CameraPost style={style.cameraComponent} onImageUpload={(url) => this.onImageUpload(url)} />
+                        <TouchableOpacity onPress={() => this.setState({ cameraOpen: false })} style={style.btnOff}>
+                            <Entypo name="circle-with-cross" size={40} color="red" />
+                        </TouchableOpacity>
+                    </View>
+                }
             </View>
         );
     }
@@ -121,4 +143,4 @@ const style = StyleSheet.create({
     }
 })
 
-export default Register
+export default Register;

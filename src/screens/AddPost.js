@@ -40,8 +40,11 @@ class AddPost extends Component {
             photo: this.state.photo
         })
         .then(res => {
-            console.log(res);
             this.props.navigation.navigate('TabNavigation')
+            this.setState({
+                description: '',
+                photo: '',
+            })
         })
         .catch(error => /* this.setState({
             msj: error.message
