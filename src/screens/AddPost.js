@@ -1,8 +1,10 @@
 import React,{Component} from 'react';
 import {TouchableOpacity,View, Text, StyleSheet, TextInput, Image } from 'react-native';
-import {db, auth} from '../firebase/config';
-import { FontAwesome, Ionicons, AntDesign, Entypo } from '@expo/vector-icons';
+import {db, auth, storage} from '../firebase/config';
+import { FontAwesome, Ionicons, AntDesign, Entypo, MaterialIcons } from '@expo/vector-icons';
 import CameraPost from '../components/CameraPost';
+import * as ImagePicker from 'expo-image-picker';
+
 
 
 class AddPost extends Component {
@@ -13,6 +15,7 @@ class AddPost extends Component {
             msj: '',
             cameraOpen: false,
             photo: '',
+            enableBtn: true
         }
     }
 
@@ -20,7 +23,8 @@ class AddPost extends Component {
     onImageUpload(url) {
         this.setState({
             photo: url,
-            cameraOpen: false
+            cameraOpen: false,
+            msj: ''
         })
     }
 
@@ -31,6 +35,22 @@ class AddPost extends Component {
     }
 
     crearPost() {
+        this.setState({
+            enableBtn: false
+        })
+        if(this.state.description === '') {
+            this.setState({
+                msj: 'No hay descripcion'
+            }) 
+        } else if(this.state.photo === ''){
+            this.setState({
+                msj: 'No hay foto'
+            }) 
+        } else if (this.state.enableBtn === false ) {
+            this.setState({
+                msj: 'La carga del posteo ya se esta procesando'
+            })
+        } else{
         db.collection('posts').add({
             owner: auth.currentUser.email,
             description: this.state.description,
@@ -44,32 +64,72 @@ class AddPost extends Component {
             this.setState({
                 description: '',
                 photo: '',
+                msj: ''
             })
         })
-        .catch(error => /* this.setState({
+        .catch(error => this.setState({
             msj: error.message
-        }) */
-        console.log(error)
+        })
         )
+        }
     }
 
+    pickImage = async () => {
+        let results = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+            aspect: [1],
+        })
+        this.handleImagePicked(results);
+       }
+
+    handleImagePicked = async (results) => {
+        try {
+          if (!results.cancelled) {
+            this.savePhoto(results.uri);
+          }
+        } catch (e) {
+          console.log(e);
+          alert("Image upload failed");
+        }
+    };
+
+    savePhoto(uploadUrl){
+        fetch(uploadUrl)
+         .then(res=>res.blob())
+         .then(image =>{
+           const ref=storage.ref(`photos/${Date.now()}.jpg`)
+           ref.put(image)
+                .then(()=>{
+                   ref.getDownloadURL()
+                        .then(url => {
+                            this.onImageUpload(url);
+                         })
+                 })
+         })
+         .catch(e=>console.log(e))
+       }
 
     render() {
         return (
             <View style={style.container}>
                 {this.state.cameraOpen === false ?
                     <React.Fragment>
-                        {this.state.msj !== '' ? <Text>{this.state.msj}</Text> : null}
+                        {this.state.msj !== '' ? <Text style={style.error}>{this.state.msj}</Text> : null}
                         <Text style={style.title}>Escribí lo que quieras postear</Text>
                         <TextInput 
                         style={style.description} 
                         keyboardType='default'
                         placeholder='Compartí lo que pensás'
-                        onChangeText={text => this.setState({ description: text, error: '' })}
+                        onChangeText={text => 
+                            this.setState({ description: text, error: '', msj: '' })
+                        }
                         value={this.state.description}
                         />
                         <TouchableOpacity onPress={() => this.mostrarCamara()} style={style.mostrarCamara}>
                             <Text style={style.mostrarCamaraTxt}><AntDesign name="camerao" size={24} color="white" /> Agregar foto</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => this.pickImage()} style={style.mostrarCamara}>
+                            <Text style={style.mostrarCamaraTxt}><MaterialIcons name="add-photo-alternate" size={24} color="white" /> Agregar foto</Text>
                         </TouchableOpacity>
                         {this.state.photo !== '' ? 
                         <Image 
@@ -102,6 +162,9 @@ const style = StyleSheet.create({
         color: 'rgb(255,255,255)',
         padding: 15,
         justifyContent: 'center'
+    },
+    error: {
+        color: 'rgb(255, 0, 0)',
     },
     description: {
         backgroundColor: 'rgb(255,255,255)',
