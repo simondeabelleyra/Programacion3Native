@@ -35,7 +35,7 @@ class UsersProfile extends Component {
                         id: doc.id,
                         data: doc.data()
                     })
-                });
+                })
                 this.setState({
                     posteos: posts
                 })

@@ -31,6 +31,9 @@ class Comment extends Component{
     }
 
     comment(){
+        this.setState({
+            comentario: ''
+        })
         db.collection('posts')
         .doc(this.props.route.params.id)
         .update({

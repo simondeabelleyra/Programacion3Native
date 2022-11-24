@@ -16,13 +16,6 @@ class RegisterAddPhoto extends Component {
             error: ''
         }
     }
-
-    onImageUpload(url) {
-        this.setState({
-            photo: url,
-            cameraOpen: false,
-        })
-    }
         
     mostrarCamara() {
         this.setState({
@@ -86,6 +79,13 @@ class RegisterAddPhoto extends Component {
          })
          .catch(e=>console.log(e))
        }
+
+    onImageUpload(url) {
+        this.setState({
+            photo: url,
+            cameraOpen: false,
+        })
+    }
 
     render() {
         return (

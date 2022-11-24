@@ -37,8 +37,8 @@ class Search extends Component {
 
         let textTofilter = this.state.searchText.toLowerCase()
 
-        const filteredUsers = this.state.users.filter(users => users.data.userName?.toLowerCase().includes(textTofilter))
-        const filteredMail = this.state.users.filter(users => users.data.owner?.toLowerCase().includes(textTofilter))
+        const filteredUsers = this.state.users.filter(users => users.data.userName.toLowerCase().includes(textTofilter))
+        const filteredMail = this.state.users.filter(users => users.data.owner.toLowerCase().includes(textTofilter))
 
         if (filteredUsers == '') {
             this.setState({ userErr: true, filteredUsers: '' })

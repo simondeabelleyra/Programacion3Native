@@ -77,7 +77,7 @@ class AddPost extends Component {
     pickImage = async () => {
         let results = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
-            aspect: [1],
+            aspect: [2/1],
         })
         this.handleImagePicked(results);
        }
@@ -115,31 +115,33 @@ class AddPost extends Component {
                 {this.state.cameraOpen === false ?
                     <React.Fragment>
                         {this.state.msj !== '' ? <Text style={style.error}>{this.state.msj}</Text> : null}
-                        <Text style={style.title}>Escribí lo que quieras postear</Text>
-                        <TextInput 
-                        style={style.description} 
-                        keyboardType='default'
-                        placeholder='Compartí lo que pensás'
-                        onChangeText={text => 
-                            this.setState({ description: text, error: '', msj: '' })
-                        }
-                        value={this.state.description}
-                        />
-                        <TouchableOpacity onPress={() => this.mostrarCamara()} style={style.mostrarCamara}>
-                            <Text style={style.mostrarCamaraTxt}><AntDesign name="camerao" size={24} color="white" /> Agregar foto</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => this.pickImage()} style={style.mostrarCamara}>
-                            <Text style={style.mostrarCamaraTxt}><MaterialIcons name="add-photo-alternate" size={24} color="white" /> Agregar foto de la galeria</Text>
-                        </TouchableOpacity>
-                        {this.state.photo !== '' ? 
-                        <View>
-                        <Image 
-                            style={style.image}
-                            source={{uri: this.state.photo}}
-                        />
-                        <TouchableOpacity onPress={()=> this.setState({photo: ''})} style={style.btnDelete}><Text style={style.delete}>Borrar imagen</Text></TouchableOpacity>
+                        <View style={style.inputsYBtns}>
+                            <Text style={style.title}>Escribí lo que quieras postear</Text>
+                            <TextInput
+                                style={style.description}
+                                keyboardType='default'
+                                placeholder='Compartí lo que pensás'
+                                onChangeText={text =>
+                                    this.setState({ description: text, error: '', msj: '' })
+                                }
+                                value={this.state.description}
+                            />
+                            <TouchableOpacity onPress={() => this.mostrarCamara()} style={style.mostrarCamara}>
+                                <Text style={style.mostrarCamaraTxt}><AntDesign name="camerao" size={24} color="white" /> Agregar foto</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.pickImage()} style={style.mostrarCamara}>
+                                <Text style={style.mostrarCamaraTxt}><MaterialIcons name="add-photo-alternate" size={24} color="white" /> Agregar foto de la galeria</Text>
+                            </TouchableOpacity>
                         </View>
-                        : null}
+                        {this.state.photo !== '' ?
+                            <View style={style.imagenYDelete}>
+                                <Image
+                                    style={style.image}
+                                    source={{ uri: this.state.photo }}
+                                />
+                                <TouchableOpacity onPress={() => this.setState({ photo: '' })} style={style.btnDelete}><Text style={style.delete}>Borrar imagen</Text></TouchableOpacity>
+                            </View>
+                            : null}
                         <TouchableOpacity onPress={() => this.crearPost()} style={style.btnPost}>
                             <Text style={style.textBtn}>Compartir</Text>
                         </TouchableOpacity>
@@ -169,6 +171,12 @@ const style = StyleSheet.create({
     },
     error: {
         color: 'rgb(255, 0, 0)',
+    },
+    inputsYBtns: {
+        flex: 1
+    },
+    imagenYDelete: {
+        flex: 1
     },
     btnDelete:{
             border: 'solid',
@@ -236,8 +244,8 @@ const style = StyleSheet.create({
         color: 'rgb(240,240,240)'
     },
     image: {
-        width: 400,
-        height: 400
+        height: '50%',
+        aspectRatio: 20 / 10
     }
 })
 
