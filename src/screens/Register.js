@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { TouchableOpacity, View, TextInput, Text, StyleSheet, TouchableNativeFeedback } from 'react-native'
-import { auth,db } from '../firebase/config';
+import { auth, db } from '../firebase/config';
 import CameraPost from '../components/CameraPost';
 import { Entypo, AntDesign } from '@expo/vector-icons';
 
@@ -15,7 +15,11 @@ class Register extends Component {
             password: '',
             bio: '',
             error: '',
-            cameraOpen: false
+            check: [],
+            doubleCheck: [],
+            cameraOpen: false,
+            userErr:'',
+            mailErr:''
         }
     }
 
@@ -27,7 +31,9 @@ class Register extends Component {
     }
 
     onSubmit() {
-        auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+        
+    
+            auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(res => {
                 db.collection('users').add({
                     owner: this.state.email.toLowerCase(),
@@ -36,11 +42,14 @@ class Register extends Component {
                     createdAt: Date.now(),
                     photo: ''
                 })
-                .then((createdUser) => this.props.navigation.navigate('RegisterAddPhoto', {id: createdUser.id}))
+                    .then((createdUser) => this.props.navigation.navigate('RegisterAddPhoto', { id: createdUser.id }))
             })
             .catch(error => this.setState({
                 error: error.message
             }))
+        
+
+        
     }
 
     mostrarCamara() {
@@ -52,10 +61,16 @@ class Register extends Component {
 
 
     render() {
+
+       
+        console.log(this.state.check)
+        console.log(this.state.doubleCheck);
         return (
             <View style={style.container} >
                 <Text style={style.title}>REGISTER</Text>
-                {this.state.error !== '' ? <Text style={style.error}>{this.state.error}</Text> : null}
+                
+                {this.state.userErr !== '' ? <Text style={style.error}>{this.state.userErr}</Text> : null}
+                {this.state.mailErr !== '' ? <Text style={style.error}>{this.state.mail}</Text> : null}
                 {this.state.cameraOpen === false ?
                     <View>
                         <TextInput style={style.input}
@@ -96,7 +111,9 @@ class Register extends Component {
                             <Entypo name="circle-with-cross" size={40} color="red" />
                         </TouchableOpacity>
                     </View>
-                }
+    }
+
+
             </View>
         );
     }

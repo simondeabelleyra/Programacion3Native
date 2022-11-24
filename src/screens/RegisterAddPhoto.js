@@ -110,7 +110,7 @@ class RegisterAddPhoto extends Component {
                             <Text style={style.btnSend}>Enviar</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Login')} style={style.btn}>
-                            <Text style={style.btnContinue}>Dejarlo para después</Text>
+                            <Text style={style.btnContinue}>Usar un avatar predeterminado</Text>
                         </TouchableOpacity>
                     </View>
                     :
