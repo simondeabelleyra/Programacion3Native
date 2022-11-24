@@ -31,9 +31,7 @@ class Register extends Component {
     }
 
     onSubmit() {
-        
-    
-            auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
+        auth.createUserWithEmailAndPassword(this.state.email, this.state.password)
             .then(res => {
                 db.collection('users').add({
                     owner: this.state.email.toLowerCase(),
@@ -47,16 +45,13 @@ class Register extends Component {
             .catch(error => this.setState({
                 error: error.message
             }))
-        
-
-        
     }
 
-    mostrarCamara() {
+    /* mostrarCamara() {
         this.setState({
             cameraOpen: true
         })
-    }
+    } */
 
 
 

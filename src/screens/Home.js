@@ -9,7 +9,8 @@ class Home extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            posteos: []
+            posteos: [],
+            loader: true
         }
     }
 
@@ -25,7 +26,8 @@ class Home extends Component {
                 })
             });
             this.setState({
-                posteos: posts
+                posteos: posts,
+                loader: false
             })
         })
     };
@@ -37,7 +39,7 @@ class Home extends Component {
                     style={style.image}
                     source={logo}
                 />
-                {this.state.posteos.length === 0 ?
+                {this.state.loader === true ?
                     <ActivityIndicator size='large' color='green' />
                     :
                     <FlatList
