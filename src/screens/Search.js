@@ -40,12 +40,12 @@ class Search extends Component {
         const filteredUsers = this.state.users.filter(users => users.data.userName.toLowerCase().includes(textTofilter))
         const filteredMail = this.state.users.filter(users => users.data.owner.toLowerCase().includes(textTofilter))
 
-        if (filteredUsers == '') {
+        if (filteredUsers === '') {
             this.setState({ userErr: true, filteredUsers: '' })
         } else { this.setState({ userErr: false, filteredUsers: filteredUsers }) }
 
 
-        if (filteredMail == '') {
+        if (filteredMail === '') {
             this.setState({ mailErr: true, filteredMail: '' })
         } else { this.setState({ mailErr: false, filteredMail: filteredMail }) }
 
@@ -76,7 +76,7 @@ class Search extends Component {
                     keyboardType='search'
                     placeholder='Busca a tus amigos'
                     onChangeText={text => {
-                        if (text == '') {
+                        if (text === '') {
                             this.setState({ emptysearch: 'Ingrese datos de busqueda', searchText: text, userErr: false, mailErr: false });
                         } else {
                             this.setState({ emptysearch: '', searchText: text });

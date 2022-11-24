@@ -24,7 +24,7 @@ class Card extends Component{
                 miLike: true
             })
         } 
-        if (auth.currentUser.email == this.props.data.data.owner){
+        if (auth.currentUser.email === this.props.data.data.owner){
             this.setState({
                 owner: true
             })
